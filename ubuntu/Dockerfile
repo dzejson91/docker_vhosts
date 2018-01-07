@@ -53,11 +53,11 @@ COPY ./supervisor/cron.conf /etc/supervisor/conf.d/
 COPY ./cron/* /etc/cron.d/conf.d/
 
 # Install shortcuts to root & user
-RUN echo "if [ -f ~/.shortcuts ]; then . \"$HOME/.shortcuts\" fi" >> /home/user/.profile
-COPY ./user/.shortcuts /home/user/
-RUN echo "if [ -f ~/.shortcuts ]; then . \"$HOME/.shortcuts\" fi" >> /root/.profile
-COPY ./user/.shortcuts /root/
-
+COPY ./user/.shortcuts /.shortcuts
+RUN chmod 775 /.shortcuts \
+	&& echo "source /.shortcuts" >> /home/user/.profile \
+	&& echo "source /.shortcuts" >> /root/.profile
+	
 # Clean
 RUN apt-get clean && rm -r /var/lib/apt/lists/*
 
