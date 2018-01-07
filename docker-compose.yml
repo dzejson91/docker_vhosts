@@ -1,0 +1,75 @@
+version: "2"
+
+volumes:
+  data-www:
+  data-mysql:
+
+services:
+  
+  # vhosts
+  vhosts:
+    build:
+      context: ./ubuntu
+      dockerfile: Dockerfile
+    container_name: vhosts
+    hostname: vhosts
+    working_dir: /www
+    volumes: 
+      - data-www:/www
+#    links:
+#      - mysql
+#      - redis
+#      - memcached
+    ports:
+      - "22:22"
+      - "80:80"
+      - "443:443"
+
+  # database
+  mysql:
+    image: mysql:5.7
+    restart: always
+    container_name: mysql
+    hostname: mysql
+    volumes:
+      - data-mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=krasnal
+    ports:
+      - "3306:3306"
+
+  # phpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    restart: always
+    container_name: phpmyadmin
+    domainname: phpmyadmin.docker
+    hostname: phpmyadmin
+    environment:
+      - PMA_HOST=mysql
+      - PMA_PORT=3306
+    ports:
+      - "8080:80"
+    links: 
+      - mysql
+
+  # Cache - Redis
+  redis:
+    image: redis:latest
+    restart: always
+    container_name: redis
+    hostname: redis
+    working_dir: /data
+    #volumes:
+       #- data-redis:/data
+    ports:
+      - "6379:6379"
+  
+  # Cache memcached
+  memcached:
+    image: memcached:latest
+    restart: always
+    container_name: memcached
+    hostname: memcached
+    ports:
+      - "11211:11211"
