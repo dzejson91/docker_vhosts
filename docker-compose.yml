@@ -11,15 +11,16 @@ services:
     build:
       context: ./ubuntu
       dockerfile: Dockerfile
+    restart: always
     container_name: vhosts
     hostname: vhosts
     working_dir: /www
     volumes: 
-      - data-www:/www
-#    links:
-#      - mysql
-#      - redis
-#      - memcached
+      - /data/www:/www
+    links:
+      - mysql
+      - redis
+      - memcached
     ports:
       - "22:22"
       - "80:80"
@@ -32,7 +33,7 @@ services:
     container_name: mysql
     hostname: mysql
     volumes:
-      - data-mysql:/var/lib/mysql
+      - /data/mysql:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=krasnal
     ports:
