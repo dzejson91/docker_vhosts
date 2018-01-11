@@ -22,42 +22,17 @@ alias checkout='git checkout'
 
 alias post='composer run-script post-install-cmd'
 
-perms(){
-	sudo chown -R user ./
-	sudo chgrp -R www-data ./
-	sudo chmod -R 775 ./
-}
-
 cache()
 {
 	if [ -d "var/cache" ]; then
-		sudo chown -R user var/cache/*
 		sudo rm -rf var/cache/*
 	fi
 
 	if [ -d "app/cache" ]; then
-		sudo chown -R user app/cache/*
 		sudo rm -rf app/cache/*
 	fi
 
 	if [ -d "var/sessions" ]; then
-		sudo chown -R www-data var/sessions
+		sudo chown -R root var/sessions
 	fi
-}
-
-network(){
-	sudo service networking restart
-}
-
-starting(){
-	
-	sudo ssh-keygen -A
-	
-	sudo mkdir -p /var/run/mysqld
-	sudo mkdir -p /var/run/php
-	sudo mkdir -p /var/run/sshd
-	
-	sudo chown mysql:mysql /var/run/mysqld
-
-	sudo service supervisor start
 }

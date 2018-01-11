@@ -1,0 +1,5 @@
+/mysql/*
+!/mysql/
+/www/*
+!/www/phpinfo.php
+!/www/test.php

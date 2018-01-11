@@ -16,7 +16,7 @@ services:
     hostname: vhosts
     working_dir: /www
     volumes: 
-      - /data/www:/www
+      - ./www:/www
     links:
       - mysql
       - redis
@@ -31,9 +31,10 @@ services:
     image: mysql:5.7
     restart: always
     container_name: mysql
+    read_only: false
     hostname: mysql
     volumes:
-      - /data/mysql:/var/lib/mysql
+      - ./mysql:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=krasnal
     ports:
@@ -44,7 +45,6 @@ services:
     image: phpmyadmin/phpmyadmin:latest
     restart: always
     container_name: phpmyadmin
-    domainname: phpmyadmin.docker
     hostname: phpmyadmin
     environment:
       - PMA_HOST=mysql
