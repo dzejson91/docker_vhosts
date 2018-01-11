@@ -45,11 +45,10 @@ RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - \
 RUN apt-get install -y -q --no-install-recommends \ 
 	apache2 libapache2-mod-fastcgi \
 	&& a2enmod alias headers expires rewrite ssl actions fastcgi
-RUN mkdir -p /etc/apache2/ssl /www && chown root:www-data /www && chmod 777 /www
+RUN mkdir -p /etc/apache2/ssl /www && chown www-data:www-data /www && chmod 777 /www
 RUN rm -rf /etc/apache2/sites-enabled/*
 COPY ./supervisor/apache2.conf /etc/supervisor/conf.d/
 COPY ./apache2 /etc/apache2
-COPY ./www/* /www/
 
 
 # Install other apps
