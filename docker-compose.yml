@@ -3,6 +3,7 @@ version: "2"
 volumes:
   data-www:
   data-mysql:
+  data-redis:
 
 services:
   
@@ -16,7 +17,7 @@ services:
     hostname: vhosts
     working_dir: /www
     volumes: 
-      - ./www:/www
+      - data-www:/www
     links:
       - mysql
       - redis
@@ -34,7 +35,7 @@ services:
     read_only: false
     hostname: mysql
     volumes:
-      - ./mysql:/var/lib/mysql
+      - data-mysql:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=krasnal
     ports:
@@ -61,8 +62,8 @@ services:
     container_name: redis
     hostname: redis
     working_dir: /data
-    #volumes:
-       #- data-redis:/data
+    volumes:
+      - data-redis:/data
     ports:
       - "6379:6379"
   

@@ -2,6 +2,13 @@ FROM ubuntu:16.04
 
 LABEL maintainer="Krystian Jasnos <dzejson91@gmail.com>"
 
+# Add User & shortcuts
+RUN useradd -g 33 user
+RUN echo "user:user"|chpasswd && echo "root:root" | chpasswd
+COPY ./user/.shortcuts /home/user/.shortcuts
+RUN echo "source /home/user/.shortcuts" >> /root/.profile
+RUN echo "source /home/user/.shortcuts" >> /home/user/.profile
+
 
 # Install base
 RUN apt-get update \
@@ -10,8 +17,7 @@ RUN apt-get update \
 	software-properties-common python-software-properties \
 	supervisor curl language-pack-en
 
-RUN sed -i 's/^\(\[supervisord\]\)$/\1\nnodaemon=true/' /etc/supervisor/supervisord.conf \
-	&& echo "root:root" | chpasswd
+RUN sed -i 's/^\(\[supervisord\]\)$/\1\nnodaemon=true/' /etc/supervisor/supervisord.conf
 
 
 # Install SSH
@@ -45,7 +51,7 @@ RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - \
 RUN apt-get install -y -q --no-install-recommends \ 
 	apache2 libapache2-mod-fastcgi \
 	&& a2enmod alias headers expires rewrite ssl actions fastcgi
-RUN mkdir -p /etc/apache2/ssl /www && chown www-data:www-data /www && chmod 777 /www
+RUN mkdir -p /etc/apache2/ssl /www && chown user:www-data /www && chmod 775 /www
 RUN rm -rf /etc/apache2/sites-enabled/*
 COPY ./supervisor/apache2.conf /etc/supervisor/conf.d/
 COPY ./apache2 /etc/apache2
@@ -56,11 +62,6 @@ RUN apt-get install -y -q --no-install-recommends \
 	cron git nano htop composer
 COPY ./supervisor/cron.conf /etc/supervisor/conf.d/
 COPY ./cron/* /etc/cron.d/conf.d/
-
-
-# Install shortcuts to root
-COPY ./user/.shortcuts /root/.shortcuts
-RUN echo "source ~/.shortcuts" >> /root/.profile
 	
 
 # Clean
