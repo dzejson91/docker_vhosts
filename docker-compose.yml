@@ -23,7 +23,7 @@ services:
       - redis
       - memcached
     ports:
-      - "22:22"
+      - "2222:22"
       - "80:80"
       - "443:443"
 
