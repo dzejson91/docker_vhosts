@@ -1,0 +1,10 @@
+/redis/*
+!/redis/
+
+/redis/*
+!/redis/
+
+/www/*
+!/www/.gitignore
+!/www/phpinfo.php
+!/www/vhosts.conf

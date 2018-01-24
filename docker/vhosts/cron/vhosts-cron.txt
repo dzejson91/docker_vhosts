@@ -1,0 +1,1 @@
+* * * * * /bin/sh -c echo date > /www/cron.txt

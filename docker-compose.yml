@@ -1,23 +1,23 @@
 version: "2"
 
-volumes:
-  data-www:
-  data-mysql:
-  data-redis:
+#volumes:
+#  data-www:
+#  data-mysql:
+#  data-redis:
 
 services:
   
   # vhosts
   vhosts:
     build:
-      context: ./ubuntu
+      context: ./docker/vhosts
       dockerfile: Dockerfile
     restart: always
     container_name: vhosts
     hostname: vhosts
     working_dir: /www
     volumes: 
-      - data-www:/www
+      - "./data/www:/www"
     links:
       - mysql
       - redis
@@ -27,6 +27,23 @@ services:
       - "80:80"
       - "443:443"
 
+  # backup
+  #backup:
+  #  image: tenstartups/backup-service
+
+  # samba
+  samba:
+    image: dperson/samba
+    restart: always
+    container_name: samba
+    read_only: false
+    hostname: samba
+    volumes:
+      - "./data/www:/mount"
+    ports:
+      - "139:139"
+      - "445:445"
+
   # database
   mysql:
     image: mysql:5.7
@@ -35,7 +52,7 @@ services:
     read_only: false
     hostname: mysql
     volumes:
-      - data-mysql:/var/lib/mysql
+      - "./data/mysql:/var/lib/mysql"
     environment:
       - MYSQL_ROOT_PASSWORD=krasnal
     ports:
@@ -63,7 +80,7 @@ services:
     hostname: redis
     working_dir: /data
     volumes:
-      - data-redis:/data
+      - "./data/redis:/data"
     ports:
       - "6379:6379"
   
