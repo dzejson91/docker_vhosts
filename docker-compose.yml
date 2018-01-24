@@ -36,20 +36,24 @@ services:
     image: dperson/samba
     restart: always
     container_name: samba
-    read_only: false
     hostname: samba
+    environment:
+      USERID: 1000
+      GROUPID: 1000
+      USER: "user;user"
+      SHARE: "www;/mount;yes;yes;yes;all"
+      RECYCLE: true
     volumes:
       - "./data/www:/mount"
     ports:
-      - "139:139"
       - "445:445"
+      - "139:139"
 
   # database
   mysql:
     image: mysql:5.7
     restart: always
     container_name: mysql
-    read_only: false
     hostname: mysql
     volumes:
       - "./data/mysql:/var/lib/mysql"
