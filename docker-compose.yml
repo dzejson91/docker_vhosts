@@ -42,12 +42,14 @@ services:
       GROUPID: 1000
       USER: "user;user"
       SHARE: "www;/mount;yes;yes;yes;all"
-      RECYCLE: true
+      RECYCLE: 1
     volumes:
       - "./data/www:/mount"
     ports:
       - "445:445"
       - "139:139"
+      - "138:138/udp"
+      - "137:137/udp"
 
   # database
   mysql:
